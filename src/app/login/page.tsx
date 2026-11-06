@@ -145,10 +145,10 @@ export default function LoginPage() {
 
           <div className="text-center pt-2">
             <Link
-              href="/"
+              href="/dashboard"
               className="text-xs text-slate-500 hover:text-[#0c2340] font-semibold transition-colors"
             >
-              &larr; Back to Landing Page
+              &larr; Go to Dashboard
             </Link>
           </div>
         </div>

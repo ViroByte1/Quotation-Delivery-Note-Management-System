@@ -15,7 +15,6 @@ import {
   X,
   PlusCircle,
   Eye,
-  Building2,
 } from 'lucide-react';
 
 export function Navbar() {
@@ -171,16 +170,6 @@ export function Navbar() {
             );
           })}
 
-          <div className="pt-2 border-t border-slate-100 mt-2">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-600 hover:bg-slate-100"
-            >
-              <Building2 className="w-4 h-4" />
-              Return to Landing Page
-            </Link>
-          </div>
         </div>
       )}
     </header>
