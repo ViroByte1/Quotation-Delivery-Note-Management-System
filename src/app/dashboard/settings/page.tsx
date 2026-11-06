@@ -127,19 +127,6 @@ export default function CompanySettingsPage() {
           </div>
         </div>
 
-        {/* Live Preview Box */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-            <span className="text-xs font-extrabold text-[#0c2340] uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-[#c5a059]" /> Live Document Header Preview
-            </span>
-            <span className="text-[11px] text-slate-400">Updates dynamically</span>
-          </div>
-
-          <div className="p-4 bg-slate-50/70 border border-slate-200 rounded-xl">
-            <DocumentHeader settings={settings} />
-          </div>
-        </div>
 
         {/* Main Settings Form */}
         <form onSubmit={handleSave} className="space-y-8">
