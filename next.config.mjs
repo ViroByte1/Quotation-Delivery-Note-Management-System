@@ -6,6 +6,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  experimental: {
+    webpackBuildWorker: false,
+  },
   async redirects() {
     return [
       {

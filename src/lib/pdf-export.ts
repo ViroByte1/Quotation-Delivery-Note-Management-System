@@ -12,16 +12,27 @@ export async function exportToPDF(elementId: string, filename: string): Promise<
     throw new Error(`Element with id "${elementId}" not found for PDF export.`);
   }
 
+  // Pre-wait for web fonts (Cairo, Inter) so Arabic cursive ligatures render flawlessly
+  if ((document as any).fonts?.ready) {
+    try {
+      await (document as any).fonts.ready;
+    } catch {
+      // Continue if font API is not fully supported
+    }
+  }
+
   const originalBackground = element.style.background;
   element.style.background = '#ffffff';
 
   try {
+    // Force standard 794px desktop width capture so mobile viewports never collapse the document
     const canvas = await html2canvas(element, {
-      scale: 2.5, // High resolution for crisp text & SVGs
+      scale: 2.5, // Crisp 300 DPI vector-like clarity
       useCORS: true,
       logging: false,
       backgroundColor: '#ffffff',
-      windowWidth: element.scrollWidth,
+      width: 794,
+      windowWidth: 1200, // Forces desktop CSS breakpoint resolution inside html2canvas
     });
 
     const imgData = canvas.toDataURL('image/jpeg', 0.98);
@@ -31,35 +42,41 @@ export async function exportToPDF(elementId: string, filename: string): Promise<
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
+      compress: true,
     });
 
     const pageWidth = 210;
     const pageHeight = 297;
+    
+    // Exact proportional scaling to standard A4
+    const aspectRatio = canvas.height / canvas.width;
     let imgWidth = pageWidth;
-    let imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let imgHeight = imgWidth * aspectRatio;
     let xOffset = 0;
 
-    // Smart 1-page fit: If document is close to 1 page (up to ~15% over), scale to fit cleanly on 1 page!
-    if (imgHeight > pageHeight && imgHeight < pageHeight * 1.18) {
-      const scaleFactor = pageHeight / imgHeight;
-      imgWidth = imgWidth * scaleFactor;
-      imgHeight = pageHeight;
-      xOffset = (pageWidth - imgWidth) / 2; // center horizontally
-    }
+    // Guaranteed 1-page fit for standard business quotations/delivery notes
+    if (imgHeight <= pageHeight * 1.15) {
+      if (imgHeight > pageHeight) {
+        const factor = pageHeight / imgHeight;
+        imgWidth = imgWidth * factor;
+        imgHeight = pageHeight;
+        xOffset = (pageWidth - imgWidth) / 2;
+      }
+      pdf.addImage(imgData, 'JPEG', xOffset, 0, imgWidth, imgHeight, undefined, 'FAST');
+    } else {
+      // Legitimate multi-page document fallback (e.g. 15+ order items)
+      let heightLeft = imgHeight;
+      let position = 0;
 
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    // First page
-    pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight, undefined, 'FAST');
-    heightLeft -= pageHeight;
-
-    // Handle subsequent pages only if document is legitimately multi-page (e.g. 10+ items)
-    while (heightLeft > 10) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
       pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
+
+      while (heightLeft > 5) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight, undefined, 'FAST');
+        heightLeft -= pageHeight;
+      }
     }
 
     pdf.save(filename.endsWith('.pdf') ? filename : `${filename}.pdf`);

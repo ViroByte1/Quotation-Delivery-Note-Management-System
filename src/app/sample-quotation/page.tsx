@@ -7,11 +7,10 @@ import { DemoBanner } from '@/components/ui/DemoBanner';
 import { QuotationDocument } from '@/components/documents/QuotationDocument';
 import { DEFAULT_COMPANY_SETTINGS } from '@/lib/constants';
 import { Quotation } from '@/types';
-import { exportToPDF, printDocument } from '@/lib/pdf-export';
+import { exportToPDF } from '@/lib/pdf-export';
 import {
   Eye,
   Download,
-  Printer,
   Sparkles,
   ArrowRight,
   CheckCircle2,
@@ -94,7 +93,7 @@ export default function SampleQuotationMatchPage() {
       await exportToPDF('quotation-print-area', 'QASD-WA-QEEMA-Reference-Quotation');
       toast.success('Downloaded client quotation PDF!');
     } catch {
-      toast.error('PDF export failed. You can use the Print button.');
+      toast.error('PDF export failed. Please try again.');
     } finally {
       setDownloading(false);
     }
@@ -122,13 +121,6 @@ export default function SampleQuotationMatchPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={() => printDocument()}
-              className="bg-white hover:bg-slate-50 text-slate-700 font-bold px-3 py-2 rounded-xl border border-slate-200 text-xs shadow-xs flex items-center gap-1.5"
-            >
-              <Printer className="w-3.5 h-3.5 text-slate-500" /> Print
-            </button>
-
             <button
               disabled={downloading}
               onClick={handleDownload}
@@ -210,7 +202,7 @@ export default function SampleQuotationMatchPage() {
                 </span>
                 <span className="text-[#f5e197] font-normal text-[11px]">100% Vector &amp; Live Data</span>
               </div>
-              <div className="overflow-x-auto">
+              <div className="w-full overflow-x-auto pb-4">
                 <QuotationDocument
                   quotation={SAMPLE_MATCH_QUOTATION}
                   settings={DEFAULT_COMPANY_SETTINGS}
@@ -221,7 +213,7 @@ export default function SampleQuotationMatchPage() {
         )}
 
         {viewMode === 'recreated_only' && (
-          <div className="overflow-x-auto flex justify-center pb-8">
+          <div className="w-full overflow-x-auto flex justify-start lg:justify-center pb-8">
             <QuotationDocument
               quotation={SAMPLE_MATCH_QUOTATION}
               settings={DEFAULT_COMPANY_SETTINGS}
@@ -243,4 +235,3 @@ export default function SampleQuotationMatchPage() {
     </div>
   );
 }
-

@@ -3,7 +3,7 @@ import { CompanySettings } from '@/types';
 export const DEFAULT_COMPANY_SETTINGS: CompanySettings = {
   id: 'company-qasd-wa-qeema',
   company_name_en: 'QASD WA QEEMA TRADING EST.',
-  company_name_ar: 'مؤسسة قصد وقيمة التجارية',
+  company_name_ar: 'مؤسسة قصد وقيمه التجارية',
   cr_number: '7012340258',
   location: 'Rabigh City, Kingdom of Saudi Arabia',
   address: 'King Abdulaziz Road, Rabigh City, Makkah Region, KSA',

@@ -7,11 +7,10 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { DataService } from '@/lib/data-service';
 import { DeliveryNote, CompanySettings, DeliveryStatus } from '@/types';
 import { DeliveryNoteDocument } from '@/components/documents/DeliveryNoteDocument';
-import { exportToPDF, printDocument } from '@/lib/pdf-export';
+import { exportToPDF } from '@/lib/pdf-export';
 import { getStatusBadgeVariant } from '@/lib/utils';
 import {
   Download,
-  Printer,
   Edit,
   ArrowLeft,
 } from 'lucide-react';
@@ -50,7 +49,7 @@ export default function DeliveryNoteViewPage() {
       toast.success('PDF downloaded successfully!');
     } catch (e: any) {
       console.error('PDF error:', e);
-      toast.error('Could not generate PDF. Please use the Print button.');
+      toast.error('Could not generate PDF. Please try again.');
     } finally {
       setDownloading(false);
     }
@@ -145,13 +144,6 @@ export default function DeliveryNoteViewPage() {
             </Link>
 
             <button
-              onClick={() => printDocument()}
-              className="bg-white hover:bg-slate-50 text-slate-700 font-bold px-3 py-2 rounded-xl border border-slate-200 text-xs shadow-xs flex items-center gap-1.5"
-            >
-              <Printer className="w-3.5 h-3.5 text-slate-500" /> Print
-            </button>
-
-            <button
               disabled={downloading}
               onClick={handleDownloadPDF}
               className="bg-[#0c2340] hover:bg-[#12335c] text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm flex items-center gap-1.5 border border-[#c5a059]"
@@ -163,7 +155,7 @@ export default function DeliveryNoteViewPage() {
         </div>
 
         {/* Live Document Canvas */}
-        <div className="overflow-x-auto pb-8">
+        <div className="w-full overflow-x-auto pb-8 pt-2 flex justify-start lg:justify-center">
           <DeliveryNoteDocument deliveryNote={deliveryNote} settings={settings} />
         </div>
       </div>

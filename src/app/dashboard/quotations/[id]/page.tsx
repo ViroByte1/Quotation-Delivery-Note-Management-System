@@ -7,11 +7,10 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { DataService } from '@/lib/data-service';
 import { Quotation, CompanySettings, DocumentStatus } from '@/types';
 import { QuotationDocument } from '@/components/documents/QuotationDocument';
-import { exportToPDF, printDocument } from '@/lib/pdf-export';
+import { exportToPDF } from '@/lib/pdf-export';
 import { getStatusBadgeVariant } from '@/lib/utils';
 import {
   Download,
-  Printer,
   Edit,
   ArrowLeft,
   Truck,
@@ -52,7 +51,7 @@ export default function QuotationViewPage() {
       toast.success('PDF downloaded successfully!');
     } catch (e: any) {
       console.error('PDF error:', e);
-      toast.error('Could not generate PDF. Please use the Print button.');
+      toast.error('Could not generate PDF. Please try again.');
     } finally {
       setDownloading(false);
     }
@@ -105,7 +104,7 @@ export default function QuotationViewPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        {/* Actions Bar (Hidden on print) */}
+        {/* Actions Bar */}
         <div className="no-print bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 w-full md:w-auto">
             <Link
@@ -156,13 +155,6 @@ export default function QuotationViewPage() {
             </Link>
 
             <button
-              onClick={() => printDocument()}
-              className="bg-white hover:bg-slate-50 text-slate-700 font-bold px-3 py-2 rounded-xl border border-slate-200 text-xs shadow-xs flex items-center gap-1.5"
-            >
-              <Printer className="w-3.5 h-3.5 text-slate-500" /> Print
-            </button>
-
-            <button
               disabled={downloading}
               onClick={handleDownloadPDF}
               className="bg-[#0c2340] hover:bg-[#12335c] text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm flex items-center gap-1.5 border border-[#c5a059]"
@@ -182,8 +174,8 @@ export default function QuotationViewPage() {
           </div>
         </div>
 
-        {/* Live Document Canvas */}
-        <div className="overflow-x-auto pb-8">
+        {/* Live Document Canvas (Scrollable on small screens, centered on desktop) */}
+        <div className="w-full overflow-x-auto pb-8 pt-2 flex justify-start lg:justify-center">
           <QuotationDocument quotation={quotation} settings={settings} />
         </div>
       </div>

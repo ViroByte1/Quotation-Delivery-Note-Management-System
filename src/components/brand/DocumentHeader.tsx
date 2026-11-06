@@ -10,46 +10,54 @@ interface DocumentHeaderProps {
 
 export function DocumentHeader({ settings }: DocumentHeaderProps) {
   return (
-    <div className="w-full flex flex-col items-center">
-      {/* Top row: Logo + Separator + Company Name */}
+    <div className="w-full flex flex-col items-center select-none">
+      {/* Top row: Logo + Vertical Line + Arabic & English Company Name */}
       <div className="w-full flex items-center justify-between pb-2 pt-0.5">
-        <div className="flex items-center gap-3 sm:gap-5">
-          <Logo size={62} customLogoUrl={settings.logo_url} />
-          
-          {/* Vertical Separator */}
-          <div className="h-12 w-[1.5px] bg-[#c5a059]/40 sm:block hidden" />
+        <div className="flex items-center gap-4">
+          {/* Circular Gold & Navy Emblem */}
+          <Logo size={66} customLogoUrl={settings.logo_url} />
+
+          {/* Thin Vertical Divider (Matches reference image) */}
+          <div className="h-14 w-[1.5px] bg-[#0c2340]/40 flex-shrink-0" />
 
           {/* Company Names */}
-          <div className="flex flex-col text-left">
+          <div className="flex flex-col justify-center text-left">
+            {/* Arabic Name: Connected cursive ligatures, zero letter-spacing to prevent splitting */}
             <h1
-              className="text-lg sm:text-2xl font-extrabold text-[#0c2340] tracking-tight leading-tight"
-              style={{ fontFamily: 'var(--font-cairo), Arial, sans-serif' }}
-              dir="rtl"
+              className="text-[25px] font-extrabold text-[#0c2340] leading-tight"
+              style={{
+                fontFamily: "'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif",
+                letterSpacing: '0px',
+                wordSpacing: 'normal',
+                direction: 'rtl',
+                textAlign: 'right',
+              }}
             >
-              {settings.company_name_ar || 'مؤسسة قصد وقيمة التجارية'}
+              {settings.company_name_ar || 'مؤسسة قصد وقيمه التجارية'}
             </h1>
-            <h2 className="text-xs sm:text-sm font-black text-[#0c2340] tracking-wide mt-0.5">
+            {/* English Name: Bold Navy uppercase */}
+            <h2 className="text-[14px] font-black text-[#0c2340] tracking-wide mt-0.5 uppercase font-sans">
               {settings.company_name_en || 'QASD WA QEEMA TRADING EST.'}
             </h2>
           </div>
         </div>
       </div>
 
-      {/* Blue Banner with CR, Location, Phone, Email */}
-      <div className="w-full bg-[#0c2340] text-white rounded-full py-1 px-4 text-center mt-0.5 shadow-xs border border-[#c5a059]/30">
-        <p className="text-[10px] sm:text-xs font-medium tracking-wide flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5">
+      {/* Blue Banner with CR, Location, Phone, Email (Capsule with single-line whitespace-nowrap) */}
+      <div className="w-full bg-[#0c2340] text-white rounded-full py-1.5 px-6 text-center mt-2 shadow-xs border border-[#c5a059]/30">
+        <p className="text-[11px] font-semibold tracking-wide flex items-center justify-center gap-3 whitespace-nowrap">
           <span>
-            <strong className="text-[#f5e197]">CR No.</strong> {settings.cr_number}
+            <strong className="text-[#f5e197]">CR No.</strong> {settings.cr_number || '7012340258'}
           </span>
-          <span className="text-[#c5a059] opacity-75">|</span>
-          <span>{settings.location}</span>
-          <span className="text-[#c5a059] opacity-75">|</span>
+          <span className="text-[#c5a059] font-bold opacity-80">|</span>
+          <span>{settings.location || 'Rabigh City, Kingdom of Saudi Arabia'}</span>
+          <span className="text-[#c5a059] font-bold opacity-80">|</span>
           <span>
-            <strong className="text-[#f5e197]">Phone:</strong> {settings.phone}
+            <strong className="text-[#f5e197]">Phone:</strong> {settings.phone || '059 946 8908'}
           </span>
-          <span className="text-[#c5a059] opacity-75">|</span>
+          <span className="text-[#c5a059] font-bold opacity-80">|</span>
           <span>
-            <strong className="text-[#f5e197]">Email:</strong> {settings.email}
+            <strong className="text-[#f5e197]">Email:</strong> {settings.email || 'info@brightwaytrading.sa'}
           </span>
         </p>
       </div>
