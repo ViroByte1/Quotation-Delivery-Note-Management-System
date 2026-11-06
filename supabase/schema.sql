@@ -211,3 +211,4 @@ INSERT INTO company_settings (
   'Abid Mughal',
   'Managing Director'
 ) ON CONFLICT DO NOTHING;
+

@@ -74,3 +74,4 @@ export function SaudiSkyline({ className = '', height = 48, color = '#c5a059' }:
     </div>
   );
 }
+

@@ -110,3 +110,4 @@ export interface UserProfile {
   role: 'admin' | 'staff';
   is_demo?: boolean;
 }
+

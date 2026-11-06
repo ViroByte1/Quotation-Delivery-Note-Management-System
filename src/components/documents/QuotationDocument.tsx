@@ -223,3 +223,4 @@ export function QuotationDocument({ quotation, settings, id = 'quotation-print-a
     </div>
   );
 }
+

@@ -17,3 +17,4 @@ export function DocumentFooter({ tagline = 'Building a Brighter Future Together'
     </div>
   );
 }
+

@@ -297,3 +297,4 @@ export const INITIAL_DELIVERY_NOTES: DeliveryNote[] = [
     updated_at: '2026-02-27T15:20:00Z',
   },
 ];
+

@@ -205,3 +205,4 @@ export function DeliveryNoteDocument({ deliveryNote, settings, id = 'delivery-no
     </div>
   );
 }
+

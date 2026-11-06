@@ -56,3 +56,4 @@ export function DocumentHeader({ settings }: DocumentHeaderProps) {
     </div>
   );
 }
+

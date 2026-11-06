@@ -28,3 +28,4 @@ export const DEFAULT_COMPANY_SETTINGS: CompanySettings = {
 
 export const DEFAULT_ACKNOWLEDGMENT_TEXT = 
   'Received the above listed materials/equipment in good condition, correct quantity, and satisfactory specifications.';
+
