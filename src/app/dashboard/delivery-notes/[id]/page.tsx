@@ -7,10 +7,11 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { DataService } from '@/lib/data-service';
 import { DeliveryNote, CompanySettings, DeliveryStatus } from '@/types';
 import { DeliveryNoteDocument } from '@/components/documents/DeliveryNoteDocument';
-import { exportToPDF } from '@/lib/pdf-export';
+import { exportToPDF, printDocument } from '@/lib/pdf-export';
 import { getStatusBadgeVariant } from '@/lib/utils';
 import {
   Download,
+  Printer,
   Edit,
   ArrowLeft,
 } from 'lucide-react';
@@ -142,6 +143,13 @@ export default function DeliveryNoteViewPage() {
             >
               <Edit className="w-3.5 h-3.5 text-slate-500" /> Edit
             </Link>
+
+            <button
+              onClick={() => printDocument()}
+              className="bg-white hover:bg-slate-50 text-slate-700 font-bold px-3 py-2 rounded-xl border border-slate-200 text-xs shadow-xs flex items-center gap-1.5"
+            >
+              <Printer className="w-3.5 h-3.5 text-slate-500" /> Print
+            </button>
 
             <button
               disabled={downloading}

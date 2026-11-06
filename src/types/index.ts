@@ -44,7 +44,9 @@ export interface DeliveryNoteItem {
   s_no: number;
   description: string;
   quantity: number;
-  unit: string; // e.g. Pcs, Sets, Boxes, Meters, Lots
+  unit?: string; // e.g. Pcs, Sets, Boxes, Meters, Lots
+  unit_price?: number;
+  total?: number;
   remarks?: string;
 }
 
@@ -54,12 +56,20 @@ export interface DeliveryNote {
   delivery_date: string;
   reference_quotation_id?: string;
   reference_quotation_number?: string;
+  purchase_order?: string;
+  loc_no_name?: string;
+  delivered_to?: string;
   customer_name: string;
   customer_company: string;
   customer_phone: string;
   delivery_address: string;
   project_name: string;
   items: DeliveryNoteItem[];
+  subtotal?: number;
+  vat_rate?: number;
+  vat_amount?: number;
+  grand_total?: number;
+  amount_in_words?: string;
   prepared_by: string;
   delivered_by: string;
   received_by?: string;
@@ -67,6 +77,7 @@ export interface DeliveryNote {
   status: DeliveryStatus;
   acknowledgment_text: string;
   additional_remarks?: string;
+  sales_person?: string;
   created_at: string;
   updated_at: string;
 }
@@ -76,6 +87,7 @@ export interface CompanySettings {
   company_name_en: string;
   company_name_ar: string;
   cr_number: string;
+  vat_number?: string;
   location: string;
   address: string;
   phone: string;
@@ -89,6 +101,7 @@ export interface CompanySettings {
   authorized_person_designation: string;
   logo_url?: string;
   signature_url?: string;
+  stamp_url?: string;
   header_banner_text?: string;
   terms_conditions: string[];
 }
@@ -110,4 +123,3 @@ export interface UserProfile {
   role: 'admin' | 'staff';
   is_demo?: boolean;
 }
-

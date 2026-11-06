@@ -23,7 +23,7 @@ export function Logo({ className = '', size = 56, customLogoUrl, showText = fals
         {showText && (
           <div className="flex flex-col">
             <span className="font-bold text-[#0c2340] text-sm tracking-wide">
-              مؤسسة قصد وقيمه التجارية
+              مؤسسة قصد وقيمة التجارية
             </span>
             <span className="font-extrabold text-[#0c2340] text-xs tracking-wider">
               QASD WA QEEMA TRADING EST.
@@ -83,7 +83,7 @@ export function Logo({ className = '', size = 56, customLogoUrl, showText = fals
       {showText && (
         <div className="flex flex-col">
           <span className="font-bold text-[#0c2340] text-sm tracking-wide" style={{ fontFamily: 'var(--font-cairo), sans-serif' }}>
-            مؤسسة قصد وقيمه التجارية
+            مؤسسة قصد وقيمة التجارية
           </span>
           <span className="font-black text-[#0c2340] text-xs tracking-wider">
             QASD WA QEEMA TRADING EST.

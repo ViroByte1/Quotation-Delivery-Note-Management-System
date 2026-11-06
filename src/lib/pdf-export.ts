@@ -21,23 +21,44 @@ export async function exportToPDF(elementId: string, filename: string): Promise<
     }
   }
 
-  const originalBackground = element.style.background;
-  element.style.background = '#ffffff';
+  // Temporarily reset box shadow and outer border for ultra-crisp capture
+  const prevBoxShadow = element.style.boxShadow;
+  const prevBorder = element.style.border;
+  element.style.boxShadow = 'none';
+  element.style.border = 'none';
 
   try {
-    // Force standard 794px desktop width capture so mobile viewports never collapse the document
     const canvas = await html2canvas(element, {
-      scale: 2.5, // Crisp 300 DPI vector-like clarity
+      scale: 2,
       useCORS: true,
+      allowTaint: true,
       logging: false,
       backgroundColor: '#ffffff',
-      width: 794,
-      windowWidth: 1200, // Forces desktop CSS breakpoint resolution inside html2canvas
+      windowWidth: 1200,
+      onclone: (clonedDoc) => {
+        const style = clonedDoc.createElement('style');
+        style.textContent = `
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            text-rendering: geometricPrecision !important;
+          }
+        `;
+        clonedDoc.head.appendChild(style);
+
+        const el = clonedDoc.getElementById(elementId);
+        if (el) {
+          el.style.boxShadow = 'none';
+          el.style.border = 'none';
+          el.style.margin = '0 auto';
+          el.style.width = '794px';
+          el.style.minWidth = '794px';
+          el.style.maxWidth = '794px';
+        }
+      },
     });
 
-    const imgData = canvas.toDataURL('image/jpeg', 0.98);
-
-    // Standard A4 dimensions in mm: 210 x 297
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
@@ -45,43 +66,42 @@ export async function exportToPDF(elementId: string, filename: string): Promise<
       compress: true,
     });
 
-    const pageWidth = 210;
-    const pageHeight = 297;
-    
-    // Exact proportional scaling to standard A4
-    const aspectRatio = canvas.height / canvas.width;
-    let imgWidth = pageWidth;
-    let imgHeight = imgWidth * aspectRatio;
-    let xOffset = 0;
+    const pageWidth = 210;   // A4 mm
+    const pageHeight = 297;  // A4 mm
 
-    // Guaranteed 1-page fit for standard business quotations/delivery notes
+    // Accurate proportional scaling to fit A4 page width
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height / canvas.width) * pageWidth;
+    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+
+    // Guaranteed 1-page fit for standard business quotations & delivery notes
     if (imgHeight <= pageHeight * 1.15) {
-      if (imgHeight > pageHeight) {
-        const factor = pageHeight / imgHeight;
-        imgWidth = imgWidth * factor;
-        imgHeight = pageHeight;
-        xOffset = (pageWidth - imgWidth) / 2;
-      }
-      pdf.addImage(imgData, 'JPEG', xOffset, 0, imgWidth, imgHeight, undefined, 'FAST');
+      const scaleFactor = imgHeight > pageHeight ? pageHeight / imgHeight : 1;
+      const finalWidth = imgWidth * scaleFactor;
+      const finalHeight = imgHeight * scaleFactor;
+      const xOffset = (pageWidth - finalWidth) / 2;
+      const yOffset = (pageHeight - finalHeight) / 5;
+      pdf.addImage(imgData, 'JPEG', xOffset, yOffset, finalWidth, finalHeight, undefined, 'FAST');
     } else {
-      // Legitimate multi-page document fallback (e.g. 15+ order items)
+      // Clean multi-page handling if document has many items
       let heightLeft = imgHeight;
       let position = 0;
 
-      pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight, undefined, 'FAST');
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
 
       while (heightLeft > 5) {
-        position = heightLeft - imgHeight;
+        position -= pageHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight, undefined, 'FAST');
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
         heightLeft -= pageHeight;
       }
     }
 
     pdf.save(filename.endsWith('.pdf') ? filename : `${filename}.pdf`);
   } finally {
-    element.style.background = originalBackground;
+    element.style.boxShadow = prevBoxShadow;
+    element.style.border = prevBorder;
   }
 }
 

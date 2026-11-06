@@ -35,18 +35,33 @@ body {
 
 /* Print Optimization */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 6mm;
+  }
+
+  /* Force ALL colors, backgrounds, images to print exactly as on screen */
   html, body {
-    background: white !important;
-    color: black !important;
-    height: auto !important;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
     margin: 0 !important;
     padding: 0 !important;
   }
+
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
   
+  /* Hide navigation, action bars, headers, footers */
   nav, sidebar, header, .no-print, button, .action-bar, footer {
     display: none !important;
   }
 
+  /* Stretch main so the document fills the printable area */
   main {
     padding: 0 !important;
     margin: 0 !important;
@@ -54,22 +69,17 @@ body {
     width: 100% !important;
   }
 
+  /* Document wrapper — full width, no shadows or outer borders */
   #quotation-print-area,
   #delivery-note-print-area {
     box-shadow: none !important;
     border: none !important;
     width: 100% !important;
+    min-width: 100% !important;
     max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 2mm 4mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-  }
-
-  @page {
-    size: A4 portrait;
-    margin: 8mm 6mm;
   }
 }

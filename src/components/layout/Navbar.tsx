@@ -4,22 +4,18 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/brand/Logo';
-import { useAuth } from '@/lib/auth-context';
 import {
   FileText,
   Truck,
   LayoutDashboard,
   Settings,
-  LogOut,
   Menu,
   X,
   PlusCircle,
-  Eye,
 } from 'lucide-react';
 
 export function Navbar() {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -27,7 +23,6 @@ export function Navbar() {
     { label: 'Quotations', href: '/dashboard/quotations', icon: FileText },
     { label: 'Delivery Notes', href: '/dashboard/delivery-notes', icon: Truck },
     { label: 'Settings', href: '/dashboard/settings', icon: Settings },
-    { label: 'Sample Reference', href: '/sample-quotation', icon: Eye },
   ];
 
   return (
@@ -71,7 +66,7 @@ export function Navbar() {
             </nav>
           </div>
 
-          {/* Quick Actions & User Controls */}
+          {/* Quick Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/dashboard/quotations/new"
@@ -89,32 +84,11 @@ export function Navbar() {
               New Delivery Note
             </Link>
 
-            {user ? (
-              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-                <div className="hidden xl:flex flex-col text-right">
-                  <span className="text-xs font-bold text-[#0c2340] leading-none">
-                    {user.full_name || 'Abid Mughal'}
-                  </span>
-                  <span className="text-[10px] text-slate-500 font-medium">
-                    {user.role === 'admin' ? 'Managing Director' : 'Staff'}
-                  </span>
-                </div>
-                <button
-                  onClick={() => logout()}
-                  title="Sign out"
-                  className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <Link
-                href="/login"
-                className="text-xs font-bold text-[#0c2340] hover:text-[#c5a059] px-3 py-2"
-              >
-                Sign In
-              </Link>
-            )}
+            {/* User label */}
+            <div className="hidden xl:flex flex-col text-right pl-2 border-l border-slate-200">
+              <span className="text-xs font-bold text-[#0c2340] leading-none">Abid Mughal</span>
+              <span className="text-[10px] text-slate-500 font-medium">Managing Director</span>
+            </div>
 
             {/* Mobile Hamburger Toggle */}
             <button
@@ -169,10 +143,8 @@ export function Navbar() {
               </Link>
             );
           })}
-
         </div>
       )}
     </header>
   );
 }
-

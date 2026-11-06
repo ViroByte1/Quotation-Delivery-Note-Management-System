@@ -276,16 +276,6 @@ export default function DashboardPage() {
               ))}
             </div>
 
-            {/* Quick Helper Banner at bottom */}
-            <div className="p-4 bg-amber-50/50 border-t border-[#c5a059]/30 text-xs text-slate-700 flex items-center justify-between">
-              <span className="font-medium">Need to inspect the original client layout?</span>
-              <Link
-                href="/sample-quotation"
-                className="font-bold text-[#0c2340] hover:underline flex items-center gap-1"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#c5a059]" /> Sample Match
-              </Link>
-            </div>
           </div>
         </div>
       </div>

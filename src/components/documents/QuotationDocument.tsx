@@ -21,103 +21,168 @@ export function QuotationDocument({ quotation, settings, id = 'quotation-print-a
         width: '794px',
         minWidth: '794px',
         maxWidth: '794px',
-        padding: '32px 36px',
+        padding: '28px 36px',
         margin: '0 auto',
         minHeight: 'auto',
         pageBreakInside: 'avoid',
         breakInside: 'avoid',
         boxSizing: 'border-box',
-      }}
+        WebkitPrintColorAdjust: 'exact',
+        printColorAdjust: 'exact',
+      } as React.CSSProperties}
     >
       <div>
         {/* 1. Branded Header (Logo, Company Arabic/English Name & CR Navy Banner) */}
         <DocumentHeader settings={settings} />
 
         {/* 2. Document Title */}
-        <div className="text-center my-4">
-          <h2 className="text-[30px] font-black text-[#0c2340] tracking-wider uppercase font-sans">
+        <div className="text-center my-3">
+          <h2 className="text-[28px] font-black text-[#0c2340] tracking-wider uppercase font-sans leading-none">
             QUOTATION
           </h2>
         </div>
 
-        {/* 3. Document Details & Client Info Grid (2 Columns, matching reference sample) */}
-        <div className="grid grid-cols-2 gap-y-2.5 gap-x-8 text-[13px] mb-4 text-[#0c2340]">
-          <div className="flex items-baseline">
-            <span className="font-bold text-[13px] w-28 flex-shrink-0">Quotation No:</span>
-            <span className="font-semibold text-slate-800 border-b border-slate-400 flex-1 pb-0.5 px-1 truncate">
-              {quotation.quotation_number}
-            </span>
-          </div>
+        {/* 3. Document Details & Client Info Grid (Table Layout: Zero Flex/Grid baseline drift in PDF) */}
+        <table
+          className="w-full border-collapse mb-4 text-[13px] text-[#0c2340]"
+          style={{ tableLayout: 'fixed', width: '100%' }}
+        >
+          <tbody>
+            <tr>
+              <td style={{ width: '16%', fontWeight: 700, padding: '4px 0', verticalAlign: 'middle' }}>
+                Quotation No:
+              </td>
+              <td style={{ width: '34%', padding: '4px 12px 4px 4px', borderBottom: '1px solid #94a3b8', fontWeight: 600, color: '#1e293b' }}>
+                {quotation.quotation_number}
+              </td>
+              <td style={{ width: '10%', fontWeight: 700, padding: '4px 0 4px 16px', verticalAlign: 'middle' }}>
+                Date:
+              </td>
+              <td style={{ width: '40%', padding: '4px 4px 4px 4px', borderBottom: '1px solid #94a3b8', fontWeight: 600, color: '#1e293b' }}>
+                {formatDate(quotation.date)}
+              </td>
+            </tr>
+            <tr>
+              <td style={{ fontWeight: 700, padding: '8px 0 4px 0', verticalAlign: 'middle' }}>
+                To: Client Name:
+              </td>
+              <td style={{ padding: '8px 12px 4px 4px', borderBottom: '1px solid #94a3b8', fontWeight: 600, color: '#1e293b' }}>
+                {quotation.client_name} {quotation.client_company ? `(${quotation.client_company})` : ''}
+              </td>
+              <td style={{ fontWeight: 700, padding: '8px 0 4px 16px', verticalAlign: 'middle' }}>
+                Project:
+              </td>
+              <td style={{ padding: '8px 4px 4px 4px', borderBottom: '1px solid #94a3b8', fontWeight: 600, color: '#1e293b' }}>
+                {quotation.project_name || 'General Supply & Services'}
+              </td>
+            </tr>
+            {quotation.reference_number && (
+              <tr>
+                <td style={{ fontWeight: 700, padding: '8px 0 4px 0', verticalAlign: 'middle' }}>
+                  Ref / RFQ No:
+                </td>
+                <td colSpan={3} style={{ padding: '8px 4px 4px 4px', borderBottom: '1px solid #94a3b8', color: '#475569' }}>
+                  {quotation.reference_number}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
 
-          <div className="flex items-baseline">
-            <span className="font-bold text-[13px] w-14 flex-shrink-0">Date:</span>
-            <span className="font-semibold text-slate-800 border-b border-slate-400 flex-1 pb-0.5 px-1 truncate">
-              {formatDate(quotation.date)}
-            </span>
-          </div>
-
-          <div className="flex items-baseline">
-            <span className="font-bold text-[13px] w-28 flex-shrink-0">To: Client Name:</span>
-            <span className="font-semibold text-slate-800 border-b border-slate-400 flex-1 pb-0.5 px-1 truncate">
-              {quotation.client_name} {quotation.client_company ? `(${quotation.client_company})` : ''}
-            </span>
-          </div>
-
-          <div className="flex items-baseline">
-            <span className="font-bold text-[13px] w-14 flex-shrink-0">Project:</span>
-            <span className="font-semibold text-slate-800 border-b border-slate-400 flex-1 pb-0.5 px-1 truncate">
-              {quotation.project_name || 'General Supply & Services'}
-            </span>
-          </div>
-
-          {quotation.reference_number && (
-            <div className="flex items-baseline col-span-2">
-              <span className="font-bold text-[12px] w-28 flex-shrink-0">Ref / RFQ No:</span>
-              <span className="text-slate-700 border-b border-slate-400 flex-1 pb-0.5 px-1 text-[12px]">
-                {quotation.reference_number}
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* 4. Items Table (Dynamic: Only user's actual items rendered, gold borders) */}
+        {/* 4. Items Table (Dynamic: Only user's actual items rendered, gold borders, explicit inline print backgrounds) */}
         <div className="w-full border border-[#c5a059] rounded-none mb-3">
-          <table className="w-full text-left border-collapse text-[12px]">
+          <table className="w-full text-left border-collapse text-[12px]" style={{ tableLayout: 'fixed', width: '100%' }}>
             <thead>
-              <tr className="bg-[#0c2340] text-white">
-                <th className="py-2.5 px-3 font-bold text-center border-r border-[#c5a059] w-14 text-[#f5e197]">
+              <tr
+                style={{
+                  backgroundColor: '#0c2340',
+                  color: '#ffffff',
+                  WebkitPrintColorAdjust: 'exact',
+                  printColorAdjust: 'exact',
+                }}
+              >
+                <th
+                  style={{
+                    width: '50px',
+                    padding: '8px 6px',
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    borderRight: '1px solid #c5a059',
+                    color: '#f5e197',
+                    backgroundColor: '#0c2340',
+                  }}
+                >
                   S.No
                 </th>
-                <th className="py-2.5 px-3 font-bold border-r border-[#c5a059] text-[#f5e197]">
+                <th
+                  style={{
+                    padding: '8px 12px',
+                    fontWeight: 700,
+                    borderRight: '1px solid #c5a059',
+                    color: '#f5e197',
+                    backgroundColor: '#0c2340',
+                  }}
+                >
                   Description
                 </th>
-                <th className="py-2.5 px-3 font-bold text-center border-r border-[#c5a059] w-16 text-[#f5e197]">
+                <th
+                  style={{
+                    width: '65px',
+                    padding: '8px 6px',
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    borderRight: '1px solid #c5a059',
+                    color: '#f5e197',
+                    backgroundColor: '#0c2340',
+                  }}
+                >
                   Qty
                 </th>
-                <th className="py-2.5 px-3 font-bold text-center border-r border-[#c5a059] w-28 text-[#f5e197] leading-tight">
-                  Unit Price<br /><span className="text-[10px] text-white/90">SAR</span>
+                <th
+                  style={{
+                    width: '105px',
+                    padding: '8px 8px',
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    borderRight: '1px solid #c5a059',
+                    color: '#f5e197',
+                    backgroundColor: '#0c2340',
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Unit Price<br /><span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.9)' }}>SAR</span>
                 </th>
-                <th className="py-2.5 px-3 font-bold text-center w-32 text-[#f5e197] leading-tight">
-                  Total<br /><span className="text-[10px] text-white/90">SAR</span>
+                <th
+                  style={{
+                    width: '115px',
+                    padding: '8px 8px',
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    color: '#f5e197',
+                    backgroundColor: '#0c2340',
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Total<br /><span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.9)' }}>SAR</span>
                 </th>
               </tr>
             </thead>
             <tbody>
               {quotation.items.map((item, index) => (
                 <tr key={item.id || index} className="border-t border-[#c5a059]">
-                  <td className="py-2 px-3 text-center border-r border-[#c5a059] font-medium text-slate-700">
+                  <td style={{ padding: '7px 6px', textAlign: 'center', borderRight: '1px solid #c5a059', color: '#475569', fontWeight: 500 }}>
                     {item.s_no || index + 1}
                   </td>
-                  <td className="py-2 px-3 border-r border-[#c5a059] font-medium text-slate-800 leading-snug">
+                  <td style={{ padding: '7px 12px', borderRight: '1px solid #c5a059', color: '#0f172a', fontWeight: 500, lineHeight: 1.35 }}>
                     {item.description}
                   </td>
-                  <td className="py-2 px-3 text-center border-r border-[#c5a059] font-semibold text-slate-800">
+                  <td style={{ padding: '7px 6px', textAlign: 'center', borderRight: '1px solid #c5a059', fontWeight: 700, color: '#0f172a' }}>
                     {item.quantity}
                   </td>
-                  <td className="py-2 px-3 text-right border-r border-[#c5a059] font-mono text-slate-800">
+                  <td style={{ padding: '7px 8px', textAlign: 'right', borderRight: '1px solid #c5a059', fontFamily: 'monospace', color: '#1e293b' }}>
                     {formatSAR(item.unit_price)}
                   </td>
-                  <td className="py-2 px-3 text-right font-mono font-bold text-[#0c2340]">
+                  <td style={{ padding: '7px 8px', textAlign: 'right', fontFamily: 'monospace', fontWeight: 700, color: '#0c2340' }}>
                     {formatSAR(item.total)}
                   </td>
                 </tr>
@@ -189,7 +254,7 @@ export function QuotationDocument({ quotation, settings, id = 'quotation-print-a
         </div>
 
         {/* 7. Authorized Signature */}
-        <div className="mb-3">
+        <div className="mb-2">
           <div className="w-64">
             <div className="flex items-baseline mb-1">
               <span className="text-[12px] text-[#0c2340] font-bold flex-shrink-0">Authorized Signature:</span>
@@ -215,7 +280,7 @@ export function QuotationDocument({ quotation, settings, id = 'quotation-print-a
       </div>
 
       {/* 8. Branded Footer with Golden Saudi Skyline */}
-      <div className="mt-3 pt-1 border-t border-slate-100">
+      <div className="mt-2 pt-1 border-t border-slate-100">
         <DocumentFooter tagline={settings.tagline} />
       </div>
     </div>

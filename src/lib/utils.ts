@@ -10,7 +10,7 @@ export function formatSAR(amount: number | null | undefined): string {
   if (amount === undefined || amount === null || isNaN(amount)) {
     return '0.00';
   }
-  return new Intl.NumberFormat('en-SA', {
+  return new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);
@@ -31,11 +31,71 @@ export function formatDate(dateString: string | null | undefined): string {
   }
 }
 
+export function formatDateDMY(dateString: string | null | undefined): string {
+  if (!dateString) return '';
+  try {
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return dateString;
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  } catch {
+    return dateString;
+  }
+}
+
 export function formatDateISO(d: Date = new Date()): string {
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+const ONES = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+const TENS = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+function convertUnderThousand(n: number): string {
+  let s = '';
+  if (n >= 100) {
+    s += ONES[Math.floor(n / 100)] + ' Hundred ';
+    n %= 100;
+  }
+  if (n >= 20) {
+    s += TENS[Math.floor(n / 10)] + ' ';
+    n %= 10;
+  }
+  if (n > 0) {
+    s += ONES[n] + ' ';
+  }
+  return s.trim();
+}
+
+export function numberToWordsSAR(amount: number): string {
+  if (!amount || isNaN(amount) || amount === 0) return 'Zero Saudi Riyals Only';
+
+  const integerPart = Math.floor(Math.abs(amount));
+  const decimalPart = Math.round((Math.abs(amount) - integerPart) * 100);
+
+  const billions = Math.floor(integerPart / 1000000000);
+  const millions = Math.floor((integerPart % 1000000000) / 1000000);
+  const thousands = Math.floor((integerPart % 1000000) / 1000);
+  const remainder = integerPart % 1000;
+
+  let words = '';
+  if (billions > 0) words += convertUnderThousand(billions) + ' Billion ';
+  if (millions > 0) words += convertUnderThousand(millions) + ' Million ';
+  if (thousands > 0) words += convertUnderThousand(thousands) + ' Thousand ';
+  if (remainder > 0) words += convertUnderThousand(remainder) + ' ';
+
+  words = words.trim();
+  if (!words) words = 'Zero';
+
+  let result = `${words} Saudi Riyals`;
+  if (decimalPart > 0) {
+    result += ` and ${convertUnderThousand(decimalPart)} Halalas`;
+  }
+  return `${result} Only`;
 }
 
 export function calculateQuotationTotals(
@@ -78,4 +138,3 @@ export function getStatusBadgeVariant(status: string) {
       return 'bg-slate-50 text-slate-700 border-slate-200';
   }
 }
-

@@ -5,10 +5,10 @@ import { isSupabaseConfigured, supabase } from './supabase/client';
 
 // Local storage keys for persistent demo/fallback mode
 const STORAGE_KEYS = {
-  SETTINGS: 'qwq_company_settings_v2',
-  QUOTATIONS: 'qwq_quotations_v2',
-  DELIVERY_NOTES: 'qwq_delivery_notes_v2',
-  CLIENTS: 'qwq_clients_v2',
+  SETTINGS: 'qwq_company_settings_v3',
+  QUOTATIONS: 'qwq_quotations_v3',
+  DELIVERY_NOTES: 'qwq_delivery_notes_v3',
+  CLIENTS: 'qwq_clients_v3',
   DEMO_MODE: 'qwq_is_demo_mode',
 };
 

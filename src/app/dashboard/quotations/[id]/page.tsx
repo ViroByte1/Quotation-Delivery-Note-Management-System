@@ -7,10 +7,11 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { DataService } from '@/lib/data-service';
 import { Quotation, CompanySettings, DocumentStatus } from '@/types';
 import { QuotationDocument } from '@/components/documents/QuotationDocument';
-import { exportToPDF } from '@/lib/pdf-export';
+import { exportToPDF, printDocument } from '@/lib/pdf-export';
 import { getStatusBadgeVariant } from '@/lib/utils';
 import {
   Download,
+  Printer,
   Edit,
   ArrowLeft,
   Truck,
@@ -155,6 +156,13 @@ export default function QuotationViewPage() {
             </Link>
 
             <button
+              onClick={() => printDocument()}
+              className="bg-white hover:bg-slate-50 text-slate-700 font-bold px-3 py-2 rounded-xl border border-slate-200 text-xs shadow-xs flex items-center gap-1.5"
+            >
+              <Printer className="w-3.5 h-3.5 text-slate-500" /> Print
+            </button>
+
+            <button
               disabled={downloading}
               onClick={handleDownloadPDF}
               className="bg-[#0c2340] hover:bg-[#12335c] text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm flex items-center gap-1.5 border border-[#c5a059]"
@@ -166,7 +174,7 @@ export default function QuotationViewPage() {
             <button
               onClick={handleCreateDeliveryNoteFromQuote}
               className="bg-[#c5a059] hover:bg-[#b98b2e] text-[#0c2340] font-extrabold px-3 py-2 rounded-xl text-xs shadow-xs flex items-center gap-1.5"
-              title="Create corresponding Delivery Note without showing prices"
+              title="Create corresponding Delivery Note"
             >
               <Truck className="w-3.5 h-3.5" />
               Generate Delivery Note
