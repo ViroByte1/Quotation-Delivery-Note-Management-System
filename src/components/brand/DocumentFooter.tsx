@@ -9,12 +9,11 @@ interface DocumentFooterProps {
 
 export function DocumentFooter({ tagline = 'Building a Brighter Future Together' }: DocumentFooterProps) {
   return (
-    <div className="w-full flex flex-col items-center pt-3 pb-2 mt-auto">
-      <SaudiSkyline height={36} color="#c5a059" />
-      <p className="text-xs sm:text-sm font-semibold text-[#0c2340] tracking-wide mt-1 text-center">
+    <div className="w-full flex flex-col items-center pt-1 pb-1 mt-auto">
+      <SaudiSkyline height={28} color="#c5a059" />
+      <p className="text-[11px] sm:text-xs font-semibold text-[#0c2340] tracking-wide mt-0.5 text-center">
         {tagline}
       </p>
     </div>
   );
 }
-

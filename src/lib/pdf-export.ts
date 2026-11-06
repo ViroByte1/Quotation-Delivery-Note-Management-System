@@ -35,21 +35,30 @@ export async function exportToPDF(elementId: string, filename: string): Promise<
 
     const pageWidth = 210;
     const pageHeight = 297;
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let imgWidth = pageWidth;
+    let imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let xOffset = 0;
+
+    // Smart 1-page fit: If document is close to 1 page (up to ~15% over), scale to fit cleanly on 1 page!
+    if (imgHeight > pageHeight && imgHeight < pageHeight * 1.18) {
+      const scaleFactor = pageHeight / imgHeight;
+      imgWidth = imgWidth * scaleFactor;
+      imgHeight = pageHeight;
+      xOffset = (pageWidth - imgWidth) / 2; // center horizontally
+    }
 
     let heightLeft = imgHeight;
     let position = 0;
 
     // First page
-    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+    pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight, undefined, 'FAST');
     heightLeft -= pageHeight;
 
-    // Handle subsequent pages if document is multi-page
-    while (heightLeft > 5) {
+    // Handle subsequent pages only if document is legitimately multi-page (e.g. 10+ items)
+    while (heightLeft > 10) {
       position = heightLeft - imgHeight;
       pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+      pdf.addImage(imgData, 'JPEG', xOffset, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
     }
 

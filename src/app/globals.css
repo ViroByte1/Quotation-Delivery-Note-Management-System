@@ -35,9 +35,12 @@ body {
 
 /* Print Optimization */
 @media print {
-  body {
+  html, body {
     background: white !important;
     color: black !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   
   nav, sidebar, header, .no-print, button, .action-bar, footer {
@@ -47,6 +50,8 @@ body {
   main {
     padding: 0 !important;
     margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
   #quotation-print-area,
@@ -55,13 +60,16 @@ body {
     border: none !important;
     width: 100% !important;
     max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0.5cm !important;
-    page-break-after: avoid;
+    margin: 0 auto !important;
+    padding: 2mm 4mm !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
   @page {
     size: A4 portrait;
-    margin: 10mm;
+    margin: 8mm 6mm;
   }
 }
