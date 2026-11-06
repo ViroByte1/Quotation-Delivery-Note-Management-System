@@ -212,3 +212,4 @@ INSERT INTO company_settings (
   'Managing Director'
 ) ON CONFLICT DO NOTHING;
 
+
