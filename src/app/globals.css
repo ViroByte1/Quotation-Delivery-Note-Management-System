@@ -37,10 +37,10 @@ body {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 8mm 6mm;
+    margin: 10mm 8mm;
   }
 
-  /* Force ALL colors, backgrounds, images to print exactly as on screen */
+  /* Force ALL colors and backgrounds to print exactly as on screen */
   html, body {
     background: #ffffff !important;
     -webkit-print-color-adjust: exact !important;
@@ -48,6 +48,7 @@ body {
     color-adjust: exact !important;
     margin: 0 !important;
     padding: 0 !important;
+    width: 100% !important;
   }
 
   *, *::before, *::after {
@@ -55,31 +56,42 @@ body {
     print-color-adjust: exact !important;
     color-adjust: exact !important;
   }
-  
-  /* Hide navigation, action bars, headers, footers */
-  nav, sidebar, header, .no-print, button, .action-bar, footer {
+
+  /* Hide all UI chrome */
+  nav, header, footer, button, .no-print, .action-bar, aside {
     display: none !important;
   }
 
-  /* Stretch main so the document fills the printable area */
+  /* Full-page main area */
   main {
     padding: 0 !important;
     margin: 0 !important;
     max-width: 100% !important;
     width: 100% !important;
+    display: block !important;
   }
 
-  /* Document wrapper — full width, no shadows or outer borders */
+  /* Centre the fixed-width document on the printed page */
   #quotation-print-area,
   #delivery-note-print-area {
+    display: block !important;
     box-shadow: none !important;
     border: none !important;
+    /* Scale to fit A4 width; centre horizontally */
     width: 100% !important;
-    min-width: 100% !important;
+    min-width: unset !important;
     max-width: 100% !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     padding: 0 !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    /* Allow the document to scale down into A4 */
+    transform-origin: top center !important;
+  }
+
+  /* Ensure SVG elements inside the document print with full color */
+  #quotation-print-area svg,
+  #delivery-note-print-area svg {
+    overflow: visible !important;
   }
 }

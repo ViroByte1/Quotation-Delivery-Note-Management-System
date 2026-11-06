@@ -58,14 +58,14 @@ export function DocumentHeader({ settings }: DocumentHeaderProps) {
             <strong className="text-[#f5e197]">CR No.</strong> {settings.cr_number || '7012340258'}
           </span>
           <span className="text-[#c5a059] font-bold opacity-80">|</span>
-          <span>{settings.location || 'Rabigh City, Kingdom of Saudi Arabia'}</span>
+          <span>{settings.address || settings.location || 'Ishara Baladeah, Aziziyah, Jeddah 23334'}</span>
           <span className="text-[#c5a059] font-bold opacity-80">|</span>
           <span>
-            <strong className="text-[#f5e197]">Phone:</strong> {settings.phone || '059 946 8908'}
+            <strong className="text-[#f5e197]">Phone:</strong> {settings.phone || '053 132 8208'}
           </span>
           <span className="text-[#c5a059] font-bold opacity-80">|</span>
           <span>
-            <strong className="text-[#f5e197]">Email:</strong> {settings.email || 'info@brightwaytrading.sa'}
+            <strong className="text-[#f5e197]">Email:</strong> {settings.email || 'qasdwaqeema@gmail.com'}
           </span>
         </p>
       </div>

@@ -3,7 +3,6 @@
 import React from 'react';
 import { DeliveryNote, CompanySettings } from '@/types';
 import { formatSAR, formatDateDMY, numberToWordsSAR } from '@/lib/utils';
-import { MapPin, Mail, Phone } from 'lucide-react';
 
 interface DeliveryNoteDocumentProps {
   deliveryNote: DeliveryNote;
@@ -58,13 +57,23 @@ export function DeliveryNoteDocument({
       } as React.CSSProperties}
     >
       <div>
-        {/* 1. Multi-color Top Accent Bar (SVG vector rects — NEVER stripped by print or PDF) */}
-        <svg className="w-full h-[5px] block" preserveAspectRatio="none" viewBox="0 0 400 5">
-          <rect x="0" y="0" width="100" height="5" fill="#2563eb" />
-          <rect x="100" y="0" width="100" height="5" fill="#ef4444" />
-          <rect x="200" y="0" width="100" height="5" fill="#eab308" />
-          <rect x="300" y="0" width="100" height="5" fill="#22c55e" />
-        </svg>
+        {/* 1. Multi-color Top Accent Bar (HTML divs with explicit background colors — 100% reliable in both html2canvas and print) */}
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            height: '6px',
+            lineHeight: 0,
+            fontSize: 0,
+            WebkitPrintColorAdjust: 'exact',
+            printColorAdjust: 'exact',
+          }}
+        >
+          <div style={{ flex: 1, backgroundColor: '#2563eb', height: '6px' }} />
+          <div style={{ flex: 1, backgroundColor: '#ef4444', height: '6px' }} />
+          <div style={{ flex: 1, backgroundColor: '#eab308', height: '6px' }} />
+          <div style={{ flex: 1, backgroundColor: '#22c55e', height: '6px' }} />
+        </div>
 
         <div className="px-9 pt-5">
           {/* 2. Company Header with Circular Emblem & English / Arabic Names */}
@@ -101,48 +110,150 @@ export function DeliveryNoteDocument({
             </div>
           </div>
 
-          {/* Thin Divider Line (SVG rects) */}
-          <svg className="w-full h-[2px] block mt-2 mb-2" preserveAspectRatio="none" viewBox="0 0 200 2">
-            <rect x="0" y="0" width="100" height="2" fill="#ef4444" />
-            <rect x="100" y="0" width="100" height="2" fill="#eab308" />
-          </svg>
-
-          {/* 3. Contact & Registration Details */}
-          <div className="text-[11px] text-slate-800 font-medium space-y-1">
-            <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-slate-700">
-                <MapPin className="w-3 h-3 text-slate-500" />
-                {settings.address || 'Ishara Baladeah, Aziziyah, Jeddah 23334'}
-              </span>
-              <span className="flex items-center gap-1.5 text-slate-700">
-                <Mail className="w-3 h-3 text-slate-500" />
-                {settings.email || 'qasdwaqeema@gmail.com'}
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-slate-700">
-                <Phone className="w-3 h-3 text-slate-500" />
-                Contact: {settings.phone || '053 132 8208'}
-              </span>
-              <div className="flex items-center gap-3 text-slate-700">
-                <span>
-                  <strong className="text-slate-900">■ CR No:</strong> {settings.cr_number || '7012340258'}
-                </span>
-                <span>
-                  <strong className="text-slate-900">■ VAT No:</strong> {settings.vat_number || '300695361700003'}
-                </span>
-              </div>
-            </div>
+          {/* Thin Divider Line (HTML divs with explicit background colors — 100% reliable in both html2canvas and print) */}
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              height: '2px',
+              marginTop: '8px',
+              marginBottom: '8px',
+              lineHeight: 0,
+              fontSize: 0,
+              WebkitPrintColorAdjust: 'exact',
+              printColorAdjust: 'exact',
+            }}
+          >
+            <div style={{ flex: 1, backgroundColor: '#ef4444', height: '2px' }} />
+            <div style={{ flex: 1, backgroundColor: '#eab308', height: '2px' }} />
           </div>
 
-          {/* 4. Multi-color Horizontal Stripe (SVG vector) */}
-          <svg className="w-full h-[3px] block mt-2.5 mb-4" preserveAspectRatio="none" viewBox="0 0 400 3">
-            <rect x="0" y="0" width="120" height="3" fill="#3b82f6" />
-            <rect x="120" y="0" width="100" height="3" fill="#f43f5e" />
-            <rect x="220" y="0" width="100" height="3" fill="#9ca3af" />
-            <rect x="320" y="0" width="80" height="3" fill="#10b981" />
-          </svg>
+          {/* 3. Contact & Registration Details (Table layout for 100% rock-solid alignment in html2canvas & print) */}
+          <table
+            style={{
+              width: '100%',
+              borderCollapse: 'collapse',
+              fontSize: '11px',
+              color: '#334155',
+              fontWeight: 500,
+              tableLayout: 'fixed',
+            }}
+          >
+            <tbody>
+              <tr>
+                <td style={{ verticalAlign: 'middle', padding: '2px 0', width: '56%' }}>
+                  <table style={{ borderCollapse: 'collapse', display: 'inline-table', verticalAlign: 'middle' }}>
+                    <tbody>
+                      <tr>
+                        <td style={{ verticalAlign: 'middle', padding: '0 6px 0 0', lineHeight: 0, width: '16px' }}>
+                          <svg
+                            width="13"
+                            height="13"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#64748b"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            style={{ display: 'block' }}
+                          >
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                            <circle cx="12" cy="10" r="3" />
+                          </svg>
+                        </td>
+                        <td style={{ verticalAlign: 'middle', padding: 0, lineHeight: '14px', fontSize: '11px', color: '#334155' }}>
+                          {settings.address || 'Ishara Baladeah, Aziziyah, Jeddah 23334'}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td style={{ verticalAlign: 'middle', padding: '2px 0', width: '44%', textAlign: 'right' }}>
+                  <table style={{ borderCollapse: 'collapse', display: 'inline-table', verticalAlign: 'middle', marginLeft: 'auto' }}>
+                    <tbody>
+                      <tr>
+                        <td style={{ verticalAlign: 'middle', padding: '0 6px 0 0', lineHeight: 0, width: '16px' }}>
+                          <svg
+                            width="13"
+                            height="13"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#64748b"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            style={{ display: 'block' }}
+                          >
+                            <rect width="20" height="16" x="2" y="4" rx="2" />
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                          </svg>
+                        </td>
+                        <td style={{ verticalAlign: 'middle', padding: 0, lineHeight: '14px', fontSize: '11px', color: '#334155' }}>
+                          {settings.email || 'qasdwaqeema@gmail.com'}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style={{ verticalAlign: 'middle', padding: '2px 0' }}>
+                  <table style={{ borderCollapse: 'collapse', display: 'inline-table', verticalAlign: 'middle' }}>
+                    <tbody>
+                      <tr>
+                        <td style={{ verticalAlign: 'middle', padding: '0 6px 0 0', lineHeight: 0, width: '16px' }}>
+                          <svg
+                            width="13"
+                            height="13"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#64748b"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            style={{ display: 'block' }}
+                          >
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                          </svg>
+                        </td>
+                        <td style={{ verticalAlign: 'middle', padding: 0, lineHeight: '14px', fontSize: '11px', color: '#334155' }}>
+                          Contact: {settings.phone || '053 132 8208'}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td style={{ verticalAlign: 'middle', padding: '2px 0', textAlign: 'right' }}>
+                  <span style={{ marginRight: '14px', fontSize: '11px', color: '#334155' }}>
+                    <strong style={{ color: '#0f172a' }}>■ CR No:</strong> {settings.cr_number || '7012340258'}
+                  </span>
+                  <span style={{ fontSize: '11px', color: '#334155' }}>
+                    <strong style={{ color: '#0f172a' }}>■ VAT No:</strong> {settings.vat_number || '300695361700003'}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* 4. Multi-color Horizontal Stripe (HTML divs with explicit background colors — 100% reliable in both html2canvas and print) */}
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              height: '3px',
+              marginTop: '10px',
+              marginBottom: '16px',
+              lineHeight: 0,
+              fontSize: 0,
+              WebkitPrintColorAdjust: 'exact',
+              printColorAdjust: 'exact',
+            }}
+          >
+            <div style={{ width: '30%', backgroundColor: '#3b82f6', height: '3px' }} />
+            <div style={{ width: '25%', backgroundColor: '#f43f5e', height: '3px' }} />
+            <div style={{ width: '25%', backgroundColor: '#9ca3af', height: '3px' }} />
+            <div style={{ width: '20%', backgroundColor: '#10b981', height: '3px' }} />
+          </div>
 
           {/* 5. Document Title: DELIVERY NOTE / إذن تسليم */}
           <div className="text-center my-2">
@@ -157,10 +268,23 @@ export function DeliveryNoteDocument({
               إذن تسليم
             </div>
             {/* Blue & Green Pill Accent */}
-            <svg className="w-14 h-[3.5px] mx-auto mt-1 block" viewBox="0 0 60 4">
-              <rect x="0" y="0" width="30" height="4" rx="2" fill="#3b82f6" />
-              <rect x="30" y="0" width="30" height="4" rx="2" fill="#10b981" />
-            </svg>
+            <div
+              style={{
+                display: 'flex',
+                width: '56px',
+                height: '3.5px',
+                margin: '4px auto 0 auto',
+                borderRadius: '2px',
+                overflow: 'hidden',
+                lineHeight: 0,
+                fontSize: 0,
+                WebkitPrintColorAdjust: 'exact',
+                printColorAdjust: 'exact',
+              }}
+            >
+              <div style={{ flex: 1, backgroundColor: '#3b82f6', height: '3.5px' }} />
+              <div style={{ flex: 1, backgroundColor: '#10b981', height: '3.5px' }} />
+            </div>
           </div>
 
           {/* 6. Delivery Metadata Grid Box (Clean HTML Table: Zero Flex/Grid bug in PDF export) */}

@@ -12,16 +12,11 @@ export async function exportToPDF(elementId: string, filename: string): Promise<
     throw new Error(`Element with id "${elementId}" not found for PDF export.`);
   }
 
-  // Pre-wait for web fonts (Cairo, Inter) so Arabic cursive ligatures render flawlessly
+  // Wait for fonts to load
   if ((document as any).fonts?.ready) {
-    try {
-      await (document as any).fonts.ready;
-    } catch {
-      // Continue if font API is not fully supported
-    }
+    try { await (document as any).fonts.ready; } catch { /* continue */ }
   }
 
-  // Temporarily reset box shadow and outer border for ultra-crisp capture
   const prevBoxShadow = element.style.boxShadow;
   const prevBorder = element.style.border;
   element.style.boxShadow = 'none';
@@ -42,16 +37,13 @@ export async function exportToPDF(elementId: string, filename: string): Promise<
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
             color-adjust: exact !important;
-            text-rendering: geometricPrecision !important;
           }
         `;
         clonedDoc.head.appendChild(style);
-
         const el = clonedDoc.getElementById(elementId);
         if (el) {
           el.style.boxShadow = 'none';
           el.style.border = 'none';
-          el.style.margin = '0 auto';
           el.style.width = '794px';
           el.style.minWidth = '794px';
           el.style.maxWidth = '794px';
@@ -66,34 +58,34 @@ export async function exportToPDF(elementId: string, filename: string): Promise<
       compress: true,
     });
 
-    const pageWidth = 210;   // A4 mm
-    const pageHeight = 297;  // A4 mm
+    const pageWidth = 210;    // A4 width in mm
+    const pageHeight = 297;   // A4 height in mm
 
-    // Accurate proportional scaling to fit A4 page width
+    // Scale the captured canvas to fit A4 width
     const imgWidth = pageWidth;
     const imgHeight = (canvas.height / canvas.width) * pageWidth;
-    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+    const imgData = canvas.toDataURL('image/png');
 
-    // Guaranteed 1-page fit for standard business quotations & delivery notes
-    if (imgHeight <= pageHeight * 1.15) {
-      const scaleFactor = imgHeight > pageHeight ? pageHeight / imgHeight : 1;
-      const finalWidth = imgWidth * scaleFactor;
-      const finalHeight = imgHeight * scaleFactor;
-      const xOffset = (pageWidth - finalWidth) / 2;
-      const yOffset = (pageHeight - finalHeight) / 5;
-      pdf.addImage(imgData, 'JPEG', xOffset, yOffset, finalWidth, finalHeight, undefined, 'FAST');
+    if (imgHeight <= pageHeight) {
+      // Fits on one page — place at top-left corner (NO y-offset, never clip bottom)
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+    } else if (imgHeight <= pageHeight * 1.3) {
+      // Slightly over one page — shrink to fit entirely on one page
+      const scale = pageHeight / imgHeight;
+      const scaledW = imgWidth * scale;
+      const scaledH = pageHeight;
+      const xOff = (pageWidth - scaledW) / 2;
+      pdf.addImage(imgData, 'PNG', xOff, 0, scaledW, scaledH, undefined, 'FAST');
     } else {
-      // Clean multi-page handling if document has many items
+      // Genuine multi-page (many items): slice across pages
       let heightLeft = imgHeight;
       let position = 0;
-
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
-
       while (heightLeft > 5) {
         position -= pageHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
         heightLeft -= pageHeight;
       }
     }

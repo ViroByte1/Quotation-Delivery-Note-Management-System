@@ -34,7 +34,12 @@ export function Logo({ className = '', size = 56, customLogoUrl, showText = fals
     );
   }
 
-  // Exact vector reproduction of the client's circular gold & navy emblem
+  // Use solid colors everywhere — NO url(#gradient) references.
+  // SVG gradient `url()` refs are stripped by browser print engines and html2canvas clones.
+  const gold = '#c5a059';
+  const navy = '#0c2340';
+  const goldLight = '#f5e197';
+
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <div style={{ width: size, height: size }} className="relative flex-shrink-0">
@@ -44,45 +49,42 @@ export function Logo({ className = '', size = 56, customLogoUrl, showText = fals
           height={size}
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="filter drop-shadow-sm"
         >
-          {/* Outer Gold Ring */}
-          <circle cx="50" cy="46" r="42" stroke="url(#goldGrad)" strokeWidth="3.5" fill="#0c2340" />
-          <circle cx="50" cy="46" r="39" stroke="url(#goldGrad)" strokeWidth="1" fill="#0c2340" opacity="0.6" />
+          {/* Navy background circle */}
+          <circle cx="50" cy="46" r="44" fill={navy} />
 
-          {/* Golden Interlinked Stylized QQ Monogram */}
-          <g transform="translate(18, 14)">
-            {/* Left Q */}
-            <ellipse cx="26" cy="32" rx="16" ry="19" stroke="url(#goldGrad)" strokeWidth="4.2" fill="none" />
-            <path d="M 33 42 L 44 48" stroke="url(#goldGrad)" strokeWidth="4.5" strokeLinecap="round" />
+          {/* Outer gold border ring */}
+          <circle cx="50" cy="46" r="43" stroke={gold} strokeWidth="2.5" fill="none" />
+          <circle cx="50" cy="46" r="39" stroke={gold} strokeWidth="0.8" fill="none" opacity="0.5" />
 
-            {/* Right Q (intertwined) */}
-            <ellipse cx="38" cy="32" rx="16" ry="19" stroke="url(#goldGrad)" strokeWidth="4.2" fill="none" />
-            <path d="M 45 42 L 54 48" stroke="url(#goldGrad)" strokeWidth="4.5" strokeLinecap="round" />
+          {/* Left Q */}
+          <ellipse cx="37" cy="46" rx="14" ry="17" stroke={gold} strokeWidth="4" fill="none" />
+          <line x1="45" y1="56" x2="52" y2="62" stroke={gold} strokeWidth="4.5" strokeLinecap="round" />
 
-            {/* Top Star Accent */}
-            <polygon points="32,9 33.5,13 38,13 34,16 35.5,20 32,17.5 28.5,20 30,16 26,13 30.5,13" fill="url(#goldGrad)" />
-          </g>
+          {/* Right Q (overlapping) */}
+          <ellipse cx="51" cy="46" rx="14" ry="17" stroke={goldLight} strokeWidth="4" fill="none" opacity="0.85" />
+          <line x1="59" y1="56" x2="66" y2="62" stroke={goldLight} strokeWidth="4.5" strokeLinecap="round" opacity="0.85" />
 
-          {/* Underneath Gold Ribbon/Swoosh */}
-          <path
-            d="M 12 76 C 30 92, 70 92, 88 76 C 75 84, 25 84, 12 76 Z"
-            fill="url(#goldGrad)"
+          {/* Top 5-point Star */}
+          <polygon
+            points="44,16 45.5,21 51,21 46.5,24 48,29 44,26.5 40,29 41.5,24 37,21 42.5,21"
+            fill={gold}
           />
 
-          <defs>
-            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f5e197" />
-              <stop offset="50%" stopColor="#c5a059" />
-              <stop offset="100%" stopColor="#9a7428" />
-            </linearGradient>
-          </defs>
+          {/* Gold bottom swoosh / ribbon */}
+          <path
+            d="M 14 76 C 30 90, 70 90, 86 76 C 72 83, 28 83, 14 76 Z"
+            fill={gold}
+          />
         </svg>
       </div>
 
       {showText && (
         <div className="flex flex-col">
-          <span className="font-bold text-[#0c2340] text-sm tracking-wide" style={{ fontFamily: 'var(--font-cairo), sans-serif' }}>
+          <span
+            className="font-bold text-[#0c2340] text-sm tracking-wide"
+            style={{ fontFamily: 'var(--font-cairo), sans-serif' }}
+          >
             مؤسسة قصد وقيمة التجارية
           </span>
           <span className="font-black text-[#0c2340] text-xs tracking-wider">
